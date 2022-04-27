@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 using MusicSocial.Models;
 
@@ -12,14 +13,28 @@ namespace MusicSocial.Controllers
     {
         public ArtistController(MusicSocialContext db) { _db = db; }
         
+        [HttpGet("artists")]
+        public IActionResult All()
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            List<Artist> allArtists = _db.Artists
+                .Include(artist => artist.Albums)
+                .OrderBy(artist => artist.Name)
+                .ToList();
+
+            return View("All", allArtists);
+        }
+
         [HttpGet("artists/{artistId}")]
         public IActionResult Details(int artistId)
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
 
             Artist dbArtist = _db.Artists
+                .Include(artist => artist.Albums)
                 .FirstOrDefault(artist => artist.ArtistId == artistId);
-            
+
             return View("Details", dbArtist);
         }
 
@@ -36,6 +51,11 @@ namespace MusicSocial.Controllers
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
             if (!ModelState.IsValid) { return View("New"); }
+
+            _db.Artists.Add(newArtist);
+            _db.SaveChanges();
+
+            return RedirectToAction("Details", new { artistId = newArtist.ArtistId });
         }
 
         // Database

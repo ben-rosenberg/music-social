@@ -1,0 +1,24 @@
+@model Artist
+
+@{
+    ViewData["Title"] = "Add Artist";
+}
+
+<div class="row justify-content-between ml-1 mr-1 align-items-center mb-2">
+    <h1 class="text-center">Add An Artist</h1>
+    <a asp-controller="Post" asp-action="Dashboard">
+        <button class="btn btn-outline-danger">Cancel</button>
+    </a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form asp-controller="Artist" asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <span asp-validation-for="Name" class="text-danger font-weight-bold"></span>
+                <input class="form-control" asp-for="Name">
+            </div>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+</div>

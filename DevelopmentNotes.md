@@ -39,3 +39,7 @@ Format: `{date} {your name} "{commit name}" (Branch: {branch name})`
 - Added views for login and registration
 - Added links in the nav bar to view all artists or all albums, and logout button
   - Both of the `All` pages for artists and albums will have a button to add a new artist or album
+
+4/27 Ben "Basic create and read for albums and artists" (Branch: feature/album-and-artist-views)
+
+- Created basic views and routes for create and read of albums and artists

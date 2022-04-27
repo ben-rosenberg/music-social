@@ -1,0 +1,45 @@
+@model List<Album>
+
+@{
+    ViewData["Title"] = "All Albums";
+}
+
+<div class="row justify-content-between align-items-center ml-1 mr-1 mb-2">
+    <h1 class="text-center">Recent Albums</h1>
+    <a asp-controller="Album" asp-action="New">
+        <button class="btn btn-outline-primary">Add An Album</button>
+    </a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <tr>
+                <th>Artist</th>
+                <th>Album Name</th>
+                <th>Average Rating</th>
+                <th>Release Date</th>
+            </tr>
+            @foreach(Album album in Model)
+            {
+                <tr>
+                    <td>
+                        <a
+                            asp-controller="Artist"
+                            asp-action="Details"
+                            asp-route-artistId="@album.ArtistId"
+                        >@album.AlbumArtist.Name</a>
+                    </td>
+                    <td>
+                        <a
+                            asp-controller="Album"
+                            asp-action="Details"
+                            asp-route-albumId="@album.AlbumId"
+                        >@album.Name</a>
+                    </td>
+                    <td>@album.AverageRating</td>
+                    <td>@album.DisplayReleaseDate</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
