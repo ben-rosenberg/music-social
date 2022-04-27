@@ -17,11 +17,11 @@ namespace MusicSocial.Models
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Album Name")]
         public string Description { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -40,12 +40,14 @@ namespace MusicSocial.Models
             get
             {
                 float totalRating = 0.0f;
+                if (AlbumRatings == null) { return 2.5f; }
                 foreach (AlbumRating albumRating in AlbumRatings) { totalRating += albumRating.Rating; }
                 return totalRating / AlbumRatings.Count();
             }
         }
 
         // Navigation and foreign key properties
+        [Display(Name = "Artist")]
         public int ArtistId { get; set; }
         public Artist AlbumArtist { get; set; }
 

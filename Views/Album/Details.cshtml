@@ -1,0 +1,24 @@
+@model Album
+
+@{
+    ViewData["Title"] = Model.Name + " - " + Model.AlbumArtist.Name;
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">
+            @Model.Name - 
+            <a asp-controller="Artist" asp-action="Details" asp-route-artistId="@Model.AlbumArtist.ArtistId">@Model.AlbumArtist.Name</a>
+            (Average Rating: @Model.AverageRating)
+        </h5>
+        <p>Released on: @Model.DisplayReleaseDate</p>
+        <p>@Model.Description</p>
+        <h5>Recent reviews:</h5>
+        <div class="list-group">
+            @foreach(Post post in Model.Posts)
+            {
+                <a class="list-group-item list-group-item-action">@post.PostUser.Username</a>
+            }
+        </div>
+    </div>
+</div>

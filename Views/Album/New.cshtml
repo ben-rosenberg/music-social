@@ -1,0 +1,52 @@
+@model Album
+
+@{
+    ViewData["Title"] = "Add Album";
+}
+
+<div class="row justify-content-between ml-1 mr-1 align-items-center mb-2">
+    <h1 class="text-center">Add An Album</h1>
+    <div>
+        <a asp-controller="Artist" asp-action="New">
+            <button class="btn btn-outline-success">Add Artist</button>
+        </a>
+        <a asp-controller="Post" asp-action="Dashboard">
+            <button class="btn btn-outline-danger">Cancel</button>
+        </a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form asp-controller="Album" asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <span asp-validation-for="Name" class="text-danger font-weight-bold"></span>
+                <input class="form-control" asp-for="Name">
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <span asp-validation-for="Description" class="text-danger font-weight-bold"></span>
+                <textarea rows="10" class="form-control" asp-for="Description"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate"></label>
+                <span asp-validation-for="ReleaseDate" class="text-danger font-weight-bold"></span>
+                <input class="form-control" asp-for="ReleaseDate">
+            </div>
+            <div class="form-group">
+                <label asp-for="ArtistId"></label>
+                <span asp-validation-for="ArtistId" class="text-danger font-weight-bold"></span>
+                <select class="form-control" asp-for="ArtistId">
+                    @foreach(Artist artist in ViewBag.AllArtists)
+                    {
+                        <option value="@artist.ArtistId">@artist.Name</option>
+                    }
+                </select>
+            </div>
+            <input type="submit" value="Create">
+        </form>
+        <p class="font-italic mt-2">
+            Note: If the album's artist isn't listed, you will need to <a asp-controller="Artist" asp-action="New">add the artist</a>.
+        </p>
+    </div>
+</div>

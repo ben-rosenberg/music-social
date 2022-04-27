@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 using MusicSocial.Models;
 
@@ -18,6 +19,7 @@ namespace MusicSocial.Controllers
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
 
             List<Album> allAlbums = _db.Albums
+                .Include(album => album.AlbumArtist)
                 .OrderByDescending(album => album.ReleaseDate)
                 .ToList();
 
@@ -30,6 +32,8 @@ namespace MusicSocial.Controllers
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
 
             Album dbAlbum = _db.Albums
+                .Include(album => album.AlbumArtist)
+                .Include(album => album.Posts)
                 .FirstOrDefault(album => album.AlbumId == albumId);
             
             return View("Details", dbAlbum);
@@ -40,6 +44,10 @@ namespace MusicSocial.Controllers
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
 
+            ViewBag.AllArtists = _db.Artists
+                .OrderBy(artist => artist.Name)
+                .ToList();
+
             return View("New");
         }
 
@@ -47,7 +55,25 @@ namespace MusicSocial.Controllers
         public IActionResult Create(Album newAlbum)
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
-            if (!ModelState.IsValid) { return View("New"); }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.AllArtists = _db.Artists
+                    .OrderBy(artist => artist.Name)
+                    .ToList();
+                return View("New");
+            }
+
+            Artist dbArtistForThisAlbum = _db.Artists
+                .FirstOrDefault(artist => artist.ArtistId == newAlbum.ArtistId);
+            
+            newAlbum.AlbumArtist = dbArtistForThisAlbum;
+            dbArtistForThisAlbum.Albums = new List<Album>();
+            dbArtistForThisAlbum.Albums.Add(newAlbum);
+
+            _db.Albums.Add(newAlbum);
+            _db.SaveChanges();
+
+            return RedirectToAction("Details", new { albumId = newAlbum.AlbumId });
         }
 
         // Database

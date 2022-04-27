@@ -1,0 +1,35 @@
+@model List<Artist>
+
+@{
+    ViewData["Title"] = "All Artists";
+}
+
+<div class="row justify-content-between align-items-center ml-1 mr-1 mb-2">
+    <h1 class="text-center">All Artists</h1>
+    <a asp-controller="Artist" asp-action="New">
+        <button class="btn btn-outline-primary">Add An Artist</button>
+    </a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <tr>
+                <th>Artist</th>
+                <th>No. of Albums</th>
+            </tr>
+            @foreach(Artist artist in Model)
+            {
+                <tr>
+                    <td>
+                        <a
+                            asp-controller="Artist"
+                            asp-action="Details"
+                            asp-route-artistId="@artist.ArtistId"
+                        >@artist.Name</a>
+                    </td>
+                    <td>@artist.Albums.Count()</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -21,7 +21,7 @@ namespace MusicSocial.Controllers
             return View("Dashboard");
         }
 
-        [HttpGet("posts/{postId}")]
+        /* [HttpGet("posts/{postId}")]
         public IActionResult Details(int postId)
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
@@ -61,7 +61,7 @@ namespace MusicSocial.Controllers
         public IActionResult Delete(int postId)
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
-        }
+        } */
 
         // Database
         private MusicSocialContext _db;
