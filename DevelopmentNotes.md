@@ -24,10 +24,18 @@ VS Code will likely automatically run a `dotnet restore` after cloning, but you 
 
 It would probably be good to keep track of commits, ideally with notes on changes.
 
-4/26 "First commit" (Branch: Main)
+Format: `{date} {your name} "{commit name}" (Branch: {branch name})`
+
+4/26 Ben "First commit" (Branch: Main)
 
 - Updated boilerplate startup code
 - Set up file structure
 - Finished models (may need adjustment)
 - Created controller files and added method declarations--but not implementations typically--for the basic routes to the files
 - Ran initial `dotnet ef migrations add`
+
+4/27 Ben "Views for login/reg, create links in top nav bar for logout, albums, and artists" (Branch: dev)
+
+- Added views for login and registration
+- Added links in the nav bar to view all artists or all albums, and logout button
+  - Both of the `All` pages for artists and albums will have a button to add a new artist or album

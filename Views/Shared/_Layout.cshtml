@@ -24,6 +24,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if(Context.Session.GetInt32("UserId") != null)
+                        {   
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Artist" asp-action="All">Artists</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Album" asp-action="All">Albums</a>
+                            </li>
+                            <li class="nav-item ml-auto">
+                                <form asp-controller="Home" asp-action="Logout" method="post">
+                                    <input class="nav-link text-dark" type="submit" value="Logout">
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

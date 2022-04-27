@@ -12,6 +12,18 @@ namespace MusicSocial.Controllers
     {
         public AlbumController(MusicSocialContext db) { _db = db; }
 
+        [HttpGet("albums/all")]
+        public IActionResult All()
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            List<Album> allAlbums = _db.Albums
+                .OrderByDescending(album => album.ReleaseDate)
+                .ToList();
+
+            return View("All", allAlbums);
+        }
+
         [HttpGet("albums/{albumId}")]
         public IActionResult Details(int albumId)
         {

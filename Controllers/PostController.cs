@@ -17,6 +17,8 @@ namespace MusicSocial.Controllers
         public IActionResult Dashboard()
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            return View("Dashboard");
         }
 
         [HttpGet("posts/{postId}")]
