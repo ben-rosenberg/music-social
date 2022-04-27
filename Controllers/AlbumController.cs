@@ -12,7 +12,7 @@ namespace MusicSocial.Controllers
     {
         public AlbumController(MusicSocialContext db) { _db = db; }
 
-        [HttpGet("albums/all")]
+        [HttpGet("albums")]
         public IActionResult All()
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
