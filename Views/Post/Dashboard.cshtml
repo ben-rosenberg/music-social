@@ -1,2 +1,32 @@
+
+@model List<Post>
+
 @* This is just for testing login/registration, it will be replaced by recent posts *@
-<h1 class="text-center text-success">S U C C E S S</h1>
+<h1 class="text-center text-success">Dashboard</h1>
+
+
+@foreach (Post post in Model)
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+
+                <div class="w-100 h-100 mr-4">
+                    <div class="d-flex align-items-center">
+                        <img class="rounded-circle" style="height: 70px; width: 70px" src="https://thamesvalleypartnership.org.uk/wp-content/uploads/2020/10/no-photo-400x400.jpg" alt="">
+                        <h4 class="ml-3">@post.PostUser.FirstName @post.PostUser.LastName</h4>
+                        <h4 class="ml-3">@post.PostAlbum.Name - @post.PostAlbum.AlbumArtist.Name</h4>
+                    </div>
+                    <div class="border border-dark style-solid mt-3" style="height: 70px;">
+                        <p>@post.Content</p>
+                    </div>
+                </div>
+                <div>
+                    <img style="height: 200px; width: 200px" src="http://images5.fanpop.com/image/photos/28000000/randomised-random-28065165-1024-819.jpg" alt="">
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}

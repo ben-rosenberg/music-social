@@ -21,9 +21,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if(Context.Session.GetInt32("UserId") != null)
                         {   
                             <li class="nav-item">
@@ -31,6 +28,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Album" asp-action="All">Albums</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="NewPost">NewPost</a>
                             </li>
                             <li class="nav-item ml-auto">
                                 <form asp-controller="Home" asp-action="Logout" method="post">

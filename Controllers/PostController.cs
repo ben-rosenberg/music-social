@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 
 using MusicSocial.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MusicSocial.Controllers
 {
@@ -18,7 +19,42 @@ namespace MusicSocial.Controllers
         {
             if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
 
-            return View("Dashboard");
+            List<Post> allPosts = _db.Posts
+                .Include(p => p.PostUser)
+                .Include(p => p.PostAlbum).ThenInclude(a => a.AlbumArtist)
+                .ToList();
+                
+
+            return View("Dashboard", allPosts);
+        }
+
+        [HttpGet("posts/new")]
+        public IActionResult NewPost()
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+            
+            List<Album> allAlbums = _db.Albums.ToList();
+            ViewBag.AllAlbums = allAlbums;
+
+            return View("NewPost");
+        }
+
+        [HttpPost("posts/create")]
+        public IActionResult CreatePost(Post newPost)
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            if (!ModelState.IsValid) 
+            { 
+                List<Album> allAlbums = _db.Albums.ToList();
+                ViewBag.AllAlbums = allAlbums;
+                return View("NewPost"); 
+            }
+
+            newPost.UserId = (int)_UserId;
+            _db.Posts.Add(newPost);
+            _db.SaveChanges();
+            return RedirectToAction("Dashboard");
         }
 
         /* [HttpGet("posts/{postId}")]
@@ -30,19 +66,6 @@ namespace MusicSocial.Controllers
         // If we want to be able to create a new post only directly from the
         // dashboard like Facebook, this route is unnecessary. Having a
         // separate page is probably simpler though.
-        [HttpGet("posts/new")]
-        public IActionResult New()
-        {
-            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
-            return View("New");
-        }
-
-        [HttpPost("posts/create")]
-        public IActionResult Create(Post newPost)
-        {
-            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
-            if (!ModelState.IsValid) { return View("New"); }
-        }
 
         [HttpGet("posts/{postId}/edit")]
         public IActionResult Edit(int postId)

@@ -1,0 +1,29 @@
+@model Post
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="text-center">New Post</h1>
+        <form asp-controller="Post" asp-action="CreatePost" method="post">
+            <div>
+                <label>Album</label>
+            </div>
+            <div class="form-group">
+                <select asp-for="AlbumId">
+                    @foreach (Album album in ViewBag.AllAlbums)
+                    {
+                        <option value="@album.AlbumId">@album.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content"></label>
+                <input class="form-control" asp-for="Content">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Content" class="text-danger font-weight-bold"></span>
+                <span asp-validation-for="AlbumId" class="text-danger font-weight-bold"></span>
+            </div>
+            <input type="submit" value="Create">
+        </form>
+    </div>
+</div>
