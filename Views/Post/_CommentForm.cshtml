@@ -1,0 +1,12 @@
+@model Comment
+
+<div>
+    <form asp-controller="Post" asp-action="Comment" asp-route-postId="@Model.PostId">
+        <div class="form-group">
+            <label asp-for="Content">Add A Comment</label>
+            <textarea asp-for="Content" rows="3" class="form-control"></textarea>
+            <span asp-validation-for="Content" class="font-weight-bold text-danger"></span>
+        </div>
+        <input type="submit" value="Comment">
+    </form>
+</div>
