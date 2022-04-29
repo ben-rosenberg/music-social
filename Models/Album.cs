@@ -20,6 +20,10 @@ namespace MusicSocial.Models
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Image URL")]
+        public string Image {get; set;}
+
+        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
