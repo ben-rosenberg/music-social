@@ -49,7 +49,7 @@ namespace MusicSocial.Models
         // Navigation and foreign key properties...
         public List<Post> Posts { get; set; }
         public List<Like> Likes { get; set; }
-        public List<Comment> Rsvps { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 
     public class NewEmailAttribute : ValidationAttribute

@@ -1,0 +1,51 @@
+@model Post
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+
+            <div class="w-100 h-100 mr-4">
+                <div class="d-flex align-items-center">
+                    <img class="rounded-circle" style="height: 70px; width: 70px" src="https://thamesvalleypartnership.org.uk/wp-content/uploads/2020/10/no-photo-400x400.jpg" alt="">
+                    <h4 class="ml-3">@Model.PostUser.FirstName @Model.PostUser.LastName</h4>
+                    <h4 class="ml-3">@Model.PostAlbum.Name - @Model.PostAlbum.AlbumArtist.Name</h4>
+                </div>
+                <div class="border border-dark style-solid mt-3" style="height: 70px;">
+                    <p>@Model.Content</p>
+                </div>
+            </div>
+            <div>
+                <img style="height: 200px; width: 200px" src="http://images5.fanpop.com/image/photos/28000000/randomised-random-28065165-1024-819.jpg" alt="">
+            </div>
+        </div>
+        @{
+            Comment emptyComment = new Comment();
+            emptyComment.PostId = Model.PostId;
+
+            Like emptyLike = new Like();
+            emptyLike.PostId = Model.PostId;
+
+            int loggedInUserId = (int)Context.Session.GetInt32("UserId");
+            bool hasUserLikedPostAlready = @Model.Likes.Any(like => like.UserId == loggedInUserId);
+            string likeButtonText = hasUserLikedPostAlready ? "Unlike" : "Like";
+        }
+        <div class="d-flex justify-content-flex-start gap-2">
+            <form asp-action="Like" asp-controller="Post" asp-route-postId="@Model.PostId">
+                <input type="submit" value="@likeButtonText">
+            </form>
+            <span class="mr-2">@Model.Likes.Count()</span>
+        </div>
+        <partial name="_CommentForm" model="@emptyComment"></partial>
+        <table class="table table-striped">
+            @foreach(Comment comment in Model.Comments)
+            {
+                <tr>
+                    <td>
+                        <p><span class="font-weight-bold">@comment.CommentUser.FirstName @comment.CommentUser.LastName</span> on @comment.CommentUser.CreatedAt</p>
+                        <p>@comment.Content</p>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

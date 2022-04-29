@@ -22,8 +22,10 @@ namespace MusicSocial.Controllers
             List<Post> allPosts = _db.Posts
                 .Include(p => p.PostUser)
                 .Include(p => p.PostAlbum).ThenInclude(a => a.AlbumArtist)
+                .Include(post => post.Likes)
+                .Include(post => post.Comments)
+                .OrderByDescending(post => post.CreatedAt)
                 .ToList();
-                
 
             return View("Dashboard", allPosts);
         }
@@ -48,13 +50,100 @@ namespace MusicSocial.Controllers
             { 
                 List<Album> allAlbums = _db.Albums.ToList();
                 ViewBag.AllAlbums = allAlbums;
-                return View("NewPost"); 
+                return View("NewPost");
             }
 
             newPost.UserId = (int)_UserId;
             _db.Posts.Add(newPost);
             _db.SaveChanges();
             return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost("posts/{postId}/like")]
+        public IActionResult Like(int postId)
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            User dbUser = _db.Users
+                .Include(user => user.Likes)
+                .FirstOrDefault(user => user.UserId == _UserId);
+            Post dbPost = _db.Posts
+                .Include(post => post.Likes)
+                .FirstOrDefault(post => post.PostId == postId);
+            Like dbLike = _db.Likes
+                .FirstOrDefault(like => like.PostId == postId && like.UserId == _UserId);
+
+            // User hasn't liked this post yet
+            if (dbLike == null)
+            {
+                Like newLike = new Like()
+                {
+                    LikeUser = dbUser,
+                    LikePost = dbPost,
+                    UserId = (int)_UserId,
+                    PostId = postId
+                };
+
+                dbPost.Likes.Add(newLike);
+                dbUser.Likes.Add(newLike);
+
+                _db.Likes.Add(newLike);
+            }
+
+            // User has already liked this post and is unliking it
+            else
+            {
+                dbPost.Likes.Remove(dbLike);
+                dbUser.Likes.Remove(dbLike);
+                _db.Likes.Remove(dbLike);
+            }
+
+            _db.SaveChanges();
+
+            return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost("likes/{postId}/comment")]
+        public IActionResult Comment(int postId, Comment newComment)
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            User dbUser = _db.Users
+                .FirstOrDefault(user => user.UserId == _UserId);
+            Post dbPost = _db.Posts
+                .FirstOrDefault(post => post.PostId == postId);
+
+            newComment.PostId = postId;
+            newComment.CommentPost = dbPost;
+            newComment.UserId = (int)_UserId;
+            newComment.CommentUser = dbUser;
+
+            if (dbPost.Comments == null) { dbPost.Comments = new List<Comment>(); }
+            if (dbUser.Comments == null) { dbUser.Comments = new List<Comment>(); }
+            dbUser.Comments.Add(newComment);
+            dbPost.Comments.Add(newComment);
+
+            _db.Comments.Add(newComment);
+            _db.SaveChanges();
+
+            return RedirectToAction("ViewComments", new { postId = postId });
+        }
+
+        [HttpGet("posts/{postId}")]
+        public IActionResult ViewComments(int postId)
+        {
+            if (!_IsLoggedIn) { return RedirectToAction("Index", "Home"); }
+
+            Post dbPost = _db.Posts
+                .Include(post => post.Likes)
+                .Include(post => post.Comments)
+                    .ThenInclude(comment => comment.CommentUser)
+                .Include(post => post.PostUser)
+                .Include(post => post.PostAlbum)
+                    .ThenInclude(album => album.AlbumArtist)
+                .FirstOrDefault(post => post.PostId == postId);
+            
+            return View("ViewComments", dbPost);
         }
 
         /* [HttpGet("posts/{postId}")]

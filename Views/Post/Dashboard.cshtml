@@ -1,9 +1,10 @@
-
 @model List<Post>
 
-@* This is just for testing login/registration, it will be replaced by recent posts *@
-<h1 class="text-center text-success">Dashboard</h1>
+@{
+    ViewData["Title"] = "Dashboard";
+}
 
+<h1 class="text-centers">Dashboard</h1>
 
 @foreach (Post post in Model)
 {
@@ -24,9 +25,30 @@
                 <div>
                     <img style="height: 200px; width: 200px" src="http://images5.fanpop.com/image/photos/28000000/randomised-random-28065165-1024-819.jpg" alt="">
                 </div>
-
-
             </div>
+            @{
+                Comment emptyComment = new Comment();
+                emptyComment.PostId = post.PostId;
+
+                Like emptyLike = new Like();
+                emptyLike.PostId = post.PostId;
+
+                int loggedInUserId = (int)Context.Session.GetInt32("UserId");
+                bool hasUserLikedPostAlready = post.Likes.Any(like => like.UserId == loggedInUserId);
+                string likeButtonText = hasUserLikedPostAlready ? "Unlike" : "Like";
+            }
+            <div class="d-flex justify-content-between mt-2">
+                <div class="d-flex">
+                    <form asp-action="Like" asp-controller="Post" asp-route-postId="@post.PostId">
+                        <input type="submit" value="@likeButtonText">
+                    </form>
+                    <span class="ml-2">@post.Likes.Count()</span>
+                </div>
+                <div>
+                    <a asp-action="ViewComments" asp-controller="Post" asp-route-postId="@post.PostId">View Comments (@post.Comments.Count())</a>
+                </div>
+            </div>
+            <partial name="_CommentForm" model="@emptyComment"></partial>
         </div>
     </div>
 }

@@ -1,0 +1,7 @@
+@model Like
+
+<form asp-action="Like" asp-controller="Post" asp-route-postId="@Model.PostId">
+    <div class="form-group">
+        <input type="submit" value="Like">
+    </div>
+</form>
