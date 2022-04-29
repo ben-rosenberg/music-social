@@ -17,7 +17,7 @@
         <div class="list-group">
             @foreach(Post post in Model.Posts)
             {
-                <a class="list-group-item list-group-item-action">@post.PostUser.Username</a>
+                <a asp-action="ViewComments" asp-controller="Post" asp-route-postId="@post.PostId" class="list-group-item list-group-item-action">@post.PostUser.FirstName @post.PostUser.LastName</a>
             }
         </div>
     </div>

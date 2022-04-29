@@ -21,6 +21,15 @@
             </tr>
             @foreach(Album album in Model)
             {
+                float averageRating;
+                @if(album.AlbumRatings != null)
+                {
+                    averageRating = album.AlbumRatings.Sum(a => a.Rating) / album.AlbumRatings.Count();
+                }
+                else
+                {
+                    averageRating = 2.5f;
+                }
                 <tr>
                     <td>
                         <a
@@ -36,7 +45,7 @@
                             asp-route-albumId="@album.AlbumId"
                         >@album.Name</a>
                     </td>
-                    <td>@album.AverageRating</td>
+                    <td>@averageRating</td>
                     <td>@album.DisplayReleaseDate</td>
                 </tr>
             }

@@ -53,8 +53,38 @@ namespace MusicSocial.Controllers
                 return View("NewPost");
             }
 
+            User dbUser = _db.Users
+                .Include(user => user.Posts)
+                .FirstOrDefault(user => user.UserId == _UserId);
+
             newPost.UserId = (int)_UserId;
+            newPost.PostUser = dbUser;
+
+            Album dbAlbum = _db.Albums
+                .Include(album => album.AlbumRatings)
+                .Include(album => album.Posts)
+                .FirstOrDefault(album => album.AlbumId == newPost.AlbumId);
+
+            if (dbAlbum == null) { return RedirectToAction("Dashboard"); }
+
+            AlbumRating newAlbumRating = new AlbumRating()
+            {
+                Rating = newPost.AlbumRatingNumber,
+                AlbumId = newPost.AlbumId,
+                RatingAlbum = dbAlbum,
+                PostId = newPost.PostId,
+                RatingPost = newPost
+            };
+
+            newPost.PostRating = newAlbumRating;
+            newPost.RatingId = newAlbumRating.AlbumRatingId;
+            
+            dbAlbum.AlbumRatings.Add(newAlbumRating);
+            dbAlbum.Posts.Add(newPost);
+            dbUser.Posts.Add(newPost);
+
             _db.Posts.Add(newPost);
+            _db.AlbumRatings.Add(newAlbumRating);
             _db.SaveChanges();
             return RedirectToAction("Dashboard");
         }

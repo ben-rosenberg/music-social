@@ -44,9 +44,13 @@ namespace MusicSocial.Models
             get
             {
                 float totalRating = 0.0f;
-                if (AlbumRatings == null) { return 2.5f; }
+                if (AlbumRatings == null)
+                {
+                    AlbumRatings = new List<AlbumRating>();
+                    return 2.5f;
+                }
                 foreach (AlbumRating albumRating in AlbumRatings) { totalRating += albumRating.Rating; }
-                return totalRating / AlbumRatings.Count();
+                return AlbumRatings.Sum(album => album.Rating) / AlbumRatings.Count();
             }
         }
 

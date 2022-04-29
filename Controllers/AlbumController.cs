@@ -20,6 +20,7 @@ namespace MusicSocial.Controllers
 
             List<Album> allAlbums = _db.Albums
                 .Include(album => album.AlbumArtist)
+                .Include(album => album.AlbumRatings)
                 .OrderByDescending(album => album.ReleaseDate)
                 .ToList();
 
@@ -33,7 +34,9 @@ namespace MusicSocial.Controllers
 
             Album dbAlbum = _db.Albums
                 .Include(album => album.AlbumArtist)
+                .Include(album => album.AlbumRatings)
                 .Include(album => album.Posts)
+                    .ThenInclude(post => post.PostUser)
                 .FirstOrDefault(album => album.AlbumId == albumId);
             
             return View("Details", dbAlbum);

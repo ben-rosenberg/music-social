@@ -26,8 +26,6 @@ namespace MusicSocial.Models
 
         public int PostId { get; set; }
         public Post RatingPost { get; set; }
-
-        
     }
 
     // A validation attribute for ensuring that the decimal portion of a
