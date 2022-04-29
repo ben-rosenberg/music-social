@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicSocial.Models;
 
 namespace MusicSocial.Migrations
 {
     [DbContext(typeof(MusicSocialContext))]
-    partial class MusicSocialContextModelSnapshot : ModelSnapshot
+    [Migration("20220429072726_AlbumImg_and_PostRate")]
+    partial class AlbumImg_and_PostRate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

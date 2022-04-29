@@ -15,6 +15,9 @@ namespace MusicSocial.Models
         [Display(Name = "Review")]
         public string Content { get; set; }
 
+        [Required]
+        public int AlbumRating {get; set;}
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 

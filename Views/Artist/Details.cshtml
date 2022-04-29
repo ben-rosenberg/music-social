@@ -9,19 +9,25 @@
     <div class="card-body">
         <h5 class="card-title">@Model.Name's Albums</h5>
         <table class="table table-striped">
-            <tr>
-                <th>Album Name</th>
-                <th>Average Rating</th>
-                <th>Release Date</th>
-            </tr>
-            @foreach (Album album in Model.Albums)
-            {
-                <td>
-                    <a asp-controller="Album" asp-action="Details" asp-route-albumId="@album.AlbumId">@album.Name</a>
-                </td>
-                <td>@album.AverageRating</td>
-                <td>@album.DisplayReleaseDate</td>
-            }
+            <thead>
+                <tr>
+                    <th>Album Name</th>
+                    <th>Average Rating</th>
+                    <th>Release Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Album album in Model.Albums)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Album" asp-action="Details" asp-route-albumId="@album.AlbumId">@album.Name</a>
+                        </td>
+                        <td>@album.AverageRating</td>
+                        <td>@album.DisplayReleaseDate</td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </div>
